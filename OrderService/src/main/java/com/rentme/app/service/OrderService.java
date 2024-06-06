@@ -7,10 +7,14 @@ import com.rentme.app.event.OrderConfirmationEvent;
 import com.rentme.app.event.OrderEventProducer;
 import com.rentme.app.model.OrderLineRequest;
 import com.rentme.app.model.OrderRequest;
+import com.rentme.app.model.OrderResponse;
 import com.rentme.app.model.PurchaseRequest;
 import com.rentme.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +38,7 @@ public class OrderService {
         );
 
         // persist order
-        var order = orderRepository.save(
-                toOrder(request)
-        );
+        var order = orderRepository.save(toOrder(request));
 
         // persist order line
         for (PurchaseRequest purchaseRequest : request.products()) {
@@ -51,6 +53,10 @@ public class OrderService {
         }
 
         //start payment process : payment ms
+        // --> event driven microservice communication using kafka
+        //prepare payment request
+        //prepare payment event producer
+        //send message to producer: paymentRequest
 
 
         // send order confirmation : notification ms (kafka)
@@ -80,4 +86,33 @@ public class OrderService {
                 .build();
     }
 
+    public List<OrderResponse> findAll() {
+
+        return orderRepository.findAll()
+                .stream()
+                .map(order -> new OrderResponse(
+                                order.getId(),
+                                order.getReference(),
+                                order.getTotalAmount(),
+                                order.getPaymentMethod(),
+                                order.getCustomerId()
+                        )
+                )
+                .collect(Collectors.toList());
+
+    }
+
+    public OrderResponse findByOrderId(Long orderId) {
+
+        return orderRepository.findById(orderId)
+                .map(order -> new OrderResponse(
+                        order.getId(),
+                        order.getReference(),
+                        order.getTotalAmount(),
+                        order.getPaymentMethod(),
+                        order.getCustomerId()
+                ))
+                .orElseThrow();
+
+    }
 }

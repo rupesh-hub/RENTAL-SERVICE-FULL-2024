@@ -3,9 +3,12 @@ package com.rentme.app.service;
 import com.rentme.app.entity.Order;
 import com.rentme.app.entity.OrderLine;
 import com.rentme.app.model.OrderLineRequest;
+import com.rentme.app.model.OrderLineResponse;
 import com.rentme.app.repository.OrderLineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +32,17 @@ public class OrderLineService {
         );
 
         return saved.getId();
+    }
+
+    public List<OrderLineResponse> findOrderLineByOrderId(String orderId) {
+        return orderLineRepository.findByOrderId(orderId)
+                .stream()
+                .map(orderLine->new OrderLineResponse(
+                        orderLine.getId(),
+                        orderLine.getQuantity()
+                ))
+                .toList();
+
+
     }
 }

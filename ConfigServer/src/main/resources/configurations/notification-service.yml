@@ -1,11 +1,11 @@
 server:
-  port: 8787
+  port: 8686
   servlet:
-    context-path: /order-api/v1.0.0
+    context-path: /notification-api/v1.0.0
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/order_db
+    url: jdbc:postgresql://localhost:5432/notification_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -29,12 +29,15 @@ spring:
 
 
   kafka:
-    producer:
+    consumer:
       bootstrap-servers: localhost:9092
-      key-serializer: org.apache.common.serializer.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      group-id: payment-group,order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.common.serializer.StringSerializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: orderConfirmation:com.rentme.app.event.OrderConfirmationEvent
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: orderConfirmation:com.rentme.app.event.OrderConfirmation,paymentConfirmation:com.rentme.app.event.PaymentConfirmation
 
 logging:
   level:
@@ -42,9 +45,3 @@ logging:
       hibernate:
         SQL: debug
         type: trace
-
-application:
-  config:
-    authorization-url: http://localhost:authorization-service/auth-api/v1.0.0
-    product-url: http://localhost:product-service/product-api/v1.0.0
-    payment-url: http://localhost:payment-service/payment-api/v1.0.0

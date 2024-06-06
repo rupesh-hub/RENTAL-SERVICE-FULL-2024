@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: PAYMENT_SERVICE
+
+server:
+  port: 8989

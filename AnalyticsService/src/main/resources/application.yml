@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: ANALYTICS_SERVICE
+
+server:
+  port: 8181
+

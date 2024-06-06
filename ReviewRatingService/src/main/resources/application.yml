@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: REVIEW_RATING_SERVICE
+
+server:
+  port: 9191

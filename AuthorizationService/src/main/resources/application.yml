@@ -1,5 +1,7 @@
 server:
   port: 8282
+  servlet:
+    context-path: /authorization-api/v1.0.0
 
 spring:
   application:

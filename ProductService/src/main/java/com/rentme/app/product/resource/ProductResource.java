@@ -43,6 +43,16 @@ public class ProductResource {
         return ResponseEntity.ok(productService.findAll(page, size));
     }
 
+    @GetMapping("by.category/{category}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GlobalResponse<List<ProductResponse>>> getByCategory(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int limit,
+            @PathVariable String category
+    ) {
+        return ResponseEntity.ok(productService.findByCategory(page, limit, category));
+    }
+
 
     @PutMapping
     public ResponseEntity<GlobalResponse<Void>> update(@RequestBody ProductRequest request,

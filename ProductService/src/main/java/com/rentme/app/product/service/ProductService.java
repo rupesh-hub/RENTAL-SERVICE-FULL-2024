@@ -90,4 +90,27 @@ public class ProductService implements IProductService {
         return GlobalResponse.success();
     }
 
+    @Override
+    public GlobalResponse<List<ProductResponse>> findByCategory(int page, int limit, String category) {
+        Page<Product> productPage = productRepository.findByCategory(category, PageRequest.of(page, limit));
+
+        List<ProductResponse> productResponses = new ArrayList<>();
+        for (Product product : productPage.getContent()) {
+            var productResponse = ProductMapper.toResponse(product);
+            productResponses.add(productResponse);
+        }
+
+        return GlobalResponse.success(
+                productResponses,
+                Paging.builder()
+                        .page(page)
+                        .size(limit)
+                        .totalElement(productPage.getTotalElements())
+                        .totalPage(productPage.getTotalPages())
+                        .first(productPage.isFirst())
+                        .last(productPage.isLast())
+                        .build()
+        );
+    }
+
 }

@@ -36,7 +36,7 @@ public class Category {
 
     private String description;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany
     @JoinTable(
             name = "products_category",
             joinColumns = @JoinColumn(name = "category_id", nullable = false),

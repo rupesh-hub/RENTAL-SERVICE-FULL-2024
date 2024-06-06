@@ -13,5 +13,6 @@ public interface IProductService {
     GlobalResponse<List<ProductResponse>> findAll(int page, int size);
     GlobalResponse<Void> delete(Long id);
     GlobalResponse<Void> update(ProductRequest request, Long id);
+    GlobalResponse<List<ProductResponse>> findByCategory(int page, int limit, String category);
 
 }

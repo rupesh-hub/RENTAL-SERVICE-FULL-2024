@@ -2,25 +2,21 @@ package com.rentme.app.product.entity;
 
 import com.rentme.app.category.entity.Category;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "_product")
 @EntityListeners(AuditingEntityListener.class)
 @NamedQueries({
-        @NamedQuery(name = "Product.findByCategory", query = "SELECT p FROM Product p WHERE p.category = :category")
+        @NamedQuery(name = "Product.findByCategory", query = "SELECT p FROM Product p WHERE p.category.name = :category")
 })
 public class Product {
 
@@ -40,6 +36,6 @@ public class Product {
 
     private LocalDateTime bookedAt;
     private LocalDateTime bookedTill;
-    private String[] images;
+//    private String[] images;
 
 }

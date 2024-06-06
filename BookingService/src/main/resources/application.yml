@@ -4,3 +4,5 @@ spring:
 
 server:
   port: 8383
+  servlet:
+    context-path: /booking-api/v1.0.0

@@ -4,3 +4,5 @@ spring:
 
 server:
   port: 9191
+  servlet:
+    context-path: /review-api/v1.0.0

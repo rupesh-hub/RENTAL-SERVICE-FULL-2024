@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: API_GATEWAY_SERVICE
+server:
+  port: 7777
+  servlet:
+    context-path: /gateway/v1.0.0

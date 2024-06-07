@@ -1,5 +1,6 @@
 package com.rentme.app.user.entity;
 
+import com.rentme.app.address.entity.Address;
 import com.rentme.app.role.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,13 @@ import java.util.List;
 @Entity
 @Table(name = "_users")
 @DynamicUpdate
+@NamedQueries(
+        {
+                @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE LOWER(u.email) = LOWER(:email)"),
+                @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
+                @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId")
+        }
+)
 public class User {
 
 
@@ -29,11 +37,25 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private Long id;
 
+    @Column(name = "user_id", nullable = false, unique = true)
+    private String userId;
+
+    private String firstName;
+    private String lastName;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     private String password;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Role> roles;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Address> addressList;
 
 }

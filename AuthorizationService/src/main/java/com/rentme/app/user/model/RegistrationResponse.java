@@ -1,4 +1,13 @@
 package com.rentme.app.user.model;
 
-public class RegistrationResponse {
+public record RegistrationResponse(
+        String userId,
+        String firstName,
+        String lastName,
+        String username,
+        String email,
+        String password,
+        String confirmPassword,
+        boolean enabled
+) {
 }

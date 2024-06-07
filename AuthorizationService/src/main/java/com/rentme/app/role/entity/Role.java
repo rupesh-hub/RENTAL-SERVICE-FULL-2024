@@ -13,6 +13,12 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "_roles")
 @DynamicUpdate
+@NamedQueries(
+        {
+                @NamedQuery(name = "Role.findByRole", query = "SELECT r FROM Role r WHERE p.role = :role"),
+                @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE p.role_id = :roleId")
+        }
+)
 public class Role {
 
     @Id
@@ -26,6 +32,8 @@ public class Role {
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private Long id;
 
+    @Column(name = "role_id", nullable = false, unique = true)
+    private String roleId;
     private String role;
 
     @ManyToOne

@@ -1,9 +1,12 @@
 package com.rentme.app.role.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rentme.app.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,8 +18,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @NamedQueries(
         {
-                @NamedQuery(name = "Role.findByRole", query = "SELECT r FROM Role r WHERE p.role = :role"),
-                @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE p.role_id = :roleId")
+                @NamedQuery(name = "Role.findByRole", query = "SELECT r FROM Role r WHERE r.role = :role"),
+                @NamedQuery(name = "Role.findByRoleId", query = "SELECT r FROM Role r WHERE r.roleId = :roleId")
         }
 )
 public class Role {
@@ -36,7 +39,8 @@ public class Role {
     private String roleId;
     private String role;
 
-    @ManyToOne
-    private User user;
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private List<User> users;
 
 }

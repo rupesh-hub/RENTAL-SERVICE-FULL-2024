@@ -5,11 +5,9 @@ import com.rentme.app.user.model.UserResponse;
 import com.rentme.app.user.service.IUserService;
 import com.rentme.app.util.GlobalResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,12 +18,6 @@ public class UserResource {
 
     private final IUserService userService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<GlobalResponse<Void>> save(@RequestBody @Valid RegistrationRequest request)
-            throws MethodArgumentNotValidException {
-        return ResponseEntity.ok(userService.register(request));
-    }
 
     @GetMapping("/by.id/{id}")
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,6 @@
 package com.rentme.app.role.service;
 
-import com.rentme.app.exception.ApiException;
+import com.rentme.app.exception.AuthorizationServiceException;
 import com.rentme.app.role.entity.Role;
 import com.rentme.app.role.mapper.RoleMapper;
 import com.rentme.app.role.model.RoleRequest;
@@ -56,7 +56,7 @@ public class RoleService implements IRoleService {
         var response = repository
                 .findByRole(role)
                 .map(RoleMapper::toResponse)
-                .orElseThrow(() -> new ApiException("Role by " + role + " not found."));
+                .orElseThrow(() -> new AuthorizationServiceException("Role by " + role + " not found."));
         return GlobalResponse.success(response);
     }
 
@@ -65,7 +65,7 @@ public class RoleService implements IRoleService {
         var response = repository
                 .findByRoleId(roleId)
                 .map(RoleMapper::toResponse)
-                .orElseThrow(() -> new ApiException("Role by " + roleId + " not found."));
+                .orElseThrow(() -> new AuthorizationServiceException("Role by " + roleId + " not found."));
         return GlobalResponse.success(response);
     }
 
@@ -73,7 +73,7 @@ public class RoleService implements IRoleService {
     public GlobalResponse<Boolean> update(RoleRequest request, String roleId) {
         var response = repository
                 .findByRoleId(roleId)
-                .orElseThrow(() -> new ApiException("Role by " + roleId + " not found."));
+                .orElseThrow(() -> new AuthorizationServiceException("Role by " + roleId + " not found."));
 
         response.setRole(response.getRole());
         repository.save(response);
@@ -84,7 +84,7 @@ public class RoleService implements IRoleService {
     public GlobalResponse<Boolean> delete(String roleId) {
         var response = repository
                 .findByRoleId(roleId)
-                .orElseThrow(() -> new ApiException("Role by " + roleId + " not found."));
+                .orElseThrow(() -> new AuthorizationServiceException("Role by " + roleId + " not found."));
         repository.delete(response);
         return GlobalResponse.success(Boolean.TRUE);
     }

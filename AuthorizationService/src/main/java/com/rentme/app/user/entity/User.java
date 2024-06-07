@@ -52,8 +52,17 @@ public class User {
     private String password;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private List<Role> roles;
+
+    public String fullName() {
+        return firstName + " " + lastName;
+    }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Address> addressList;

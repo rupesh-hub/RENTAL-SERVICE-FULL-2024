@@ -20,8 +20,7 @@ public class CustomSecurityConfiguration {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
@@ -38,39 +37,31 @@ public class CustomSecurityConfiguration {
     @Bean
     @Order(2)
     public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-
         http.formLogin(Customizer.withDefaults());
-        http.authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/authentication/**")
+        );
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/authentication/**",
+                                "/ping").permitAll() // Make the register URL publicly accessible
+                        .anyRequest().authenticated() // Ensure all other requests are authenticated
+                )
+                .logout(logout -> logout
+                        .permitAll()
+                );
 
         return http.build();
     }
 
     @Bean
-    public AuthorizationServerSettings authorizationServerSettings(){
+    public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
     }
 
-//    @Bean
-//    public RegisteredClientRepository clientRepository(){
-//        RegisteredClient client = RegisteredClient.withId("1")
-//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-//                .build();
-//
-//        return null;
-//    }
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails userDetails = User.withUsername("rupesh")
-//                .password("test")
-//                .authorities("read")
-//                .build();
-//        return new InMemoryUserDetailsManager(userDetails);
-//    }
-
 }

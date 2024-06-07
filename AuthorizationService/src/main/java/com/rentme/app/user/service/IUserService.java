@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public interface IUserService {
 
-    GlobalResponse<Void> register(RegistrationRequest request) throws MethodArgumentNotValidException;
     GlobalResponse<UserResponse> findByUsername(String username);
     GlobalResponse<UserResponse> findByEmail(String email);
     GlobalResponse<UserResponse> findByUserId(String userId);

@@ -3,6 +3,9 @@ package com.rentme.app.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,44 +20,44 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(LockedException.class)
-//    public ResponseEntity<ErrorMessage> handleException(LockedException exp) {
-//        return ResponseEntity
-//                .status(UNAUTHORIZED)
-//                .body(
-//                        ErrorMessage.builder()
-//                                .code(ACCOUNT_LOCKED.getCode())
-//                                .message(ACCOUNT_LOCKED.getDescription())
-//                                .build()
-//                );
-//    }
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ErrorMessage> handleException(LockedException exp) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        ErrorMessage.builder()
+                                .code("401")
+                                .message("Your account is locked! Please contact admin.")
+                                .build()
+                );
+    }
 
-//    @ExceptionHandler(DisabledException.class)
-//    public ResponseEntity<ExceptionResponse> handleException(DisabledException exp) {
-//        return ResponseEntity
-//                .status(UNAUTHORIZED)
-//                .body(
-//                        ExceptionResponse.builder()
-//                                .businessErrorCode(ACCOUNT_DISABLED.getCode())
-//                                .businessErrorDescription(ACCOUNT_DISABLED.getDescription())
-//                                .error(exp.getMessage())
-//                                .build()
-//                );
-//    }
-//
-//
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<ExceptionResponse> handleException() {
-//        return ResponseEntity
-//                .status(UNAUTHORIZED)
-//                .body(
-//                        ExceptionResponse.builder()
-//                                .businessErrorCode(BAD_CREDENTIALS.getCode())
-//                                .businessErrorDescription(BAD_CREDENTIALS.getDescription())
-//                                .error("Login and / or Password is incorrect")
-//                                .build()
-//                );
-//    }
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorMessage> handleException(DisabledException exp) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        ErrorMessage.builder()
+                                .code("401")
+                                .message("Your account is disabled! Please contact admin.")
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleException(HttpServletRequest servletRequest) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        ErrorMessage.builder()
+                                .timestamp(LocalDateTime.now())
+                                .code("400")
+                                .message("Something went wrong!")
+                                .status(BAD_REQUEST)
+                                .uri(servletRequest.getRequestURI())
+                                .build()
+                );
+    }
 //
 //    @ExceptionHandler(MessagingException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(MessagingException exp) {
@@ -77,7 +80,7 @@ public class GlobalExceptionHandler {
 //                                .build()
 //                );
 //    }
-//
+
 //    @ExceptionHandler(OperationNotPermittedException.class)
 //    public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exp) {
 //        return ResponseEntity
@@ -90,7 +93,7 @@ public class GlobalExceptionHandler {
 //    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -104,8 +107,10 @@ public class GlobalExceptionHandler {
                         ErrorMessage.builder()
                                 .timestamp(LocalDateTime.now())
                                 .code("400")
+                                .message("Something went wrong!")
                                 .status(BAD_REQUEST)
                                 .errors(errors)
+                                .uri(servletRequest.getRequestURI())
                                 .build()
                 );
     }

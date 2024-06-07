@@ -1,9 +1,7 @@
 package com.rentme.app.user.service;
 
-import ch.qos.logback.core.util.StringUtil;
-import com.rentme.app.address.entity.Address;
 import com.rentme.app.address.mapper.AddressMapper;
-import com.rentme.app.exception.ApiException;
+import com.rentme.app.exception.AuthorizationServiceException;
 import com.rentme.app.role.entity.Role;
 import com.rentme.app.role.mapper.RoleMapper;
 import com.rentme.app.role.repository.RoleRepository;
@@ -20,10 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,60 +37,6 @@ public class UserService implements UserDetailsService, IUserService {
                 .map(PrincipleUser::new)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("user not found with username %s", username)));
     }
-
-    @Override
-    public GlobalResponse<Void> register(RegistrationRequest request) throws MethodArgumentNotValidException {
-        var user = UserMapper.toEntity(request);
-        List<FieldError> fieldErrors = new ArrayList<>();
-
-        // Validate username
-        var optionalUserByUsername = userRepository.findByUsername(request.username());
-        if (optionalUserByUsername.isPresent()) {
-            fieldErrors.add(new FieldError("user", "username", String.format("User with username '%s' already exists.", request.username())));
-        }
-
-        // Validate email
-        var optionalUserByEmail = userRepository.findByEmail(request.email());
-        if (optionalUserByEmail.isPresent()) {
-            fieldErrors.add(new FieldError("user", "email", String.format("User with email '%s' already exists.", request.email())));
-        }
-
-        // Validate userId
-        var optionalUserByUserId = userRepository.findByUserId(user.getUserId());
-        if (optionalUserByUserId.isPresent()) {
-            fieldErrors.add(new FieldError("user", "userId", String.format("User with user id '%s' already exists.", user.getUserId())));
-        }
-
-        // Validate password and confirmPassword
-        if (!request.password().equals(request.confirmPassword())) {
-            fieldErrors.add(new FieldError("user", "confirmPassword", "Password and confirm password do not match."));
-        }
-
-        // Throw MethodArgumentNotValidException if there are validation errors
-        if (!fieldErrors.isEmpty()) {
-            BindingResult bindingResult = new BeanPropertyBindingResult(user, "user");
-            for (FieldError fieldError : fieldErrors) {
-                bindingResult.addError(fieldError);
-            }
-            throw new MethodArgumentNotValidException(null, bindingResult);
-        }
-
-        user.setPassword(encodePassword(user.getPassword()));
-        user.setEnabled(false);
-
-        // Set address
-        Address address = AddressMapper.toEntity(request.address());
-        user.setAddressList(List.of(address));
-
-        // Set role
-        var role = roleRepository.findByRole("USER")
-                .orElseThrow(() -> new ApiException("Role not exists."));
-        user.setRoles(List.of(role));
-
-        userRepository.save(user);
-        return GlobalResponse.success();
-    }
-
 
     @Override
     public GlobalResponse<UserResponse> findByUsername(String username) {
@@ -219,7 +159,7 @@ public class UserService implements UserDetailsService, IUserService {
         List<Role> roles = new ArrayList<>();
         for (String roleId : roleIds) {
             var role = roleRepository.findByRoleId(roleId)
-                    .orElseThrow(() -> new ApiException("Role not found by role id: " + roleId));
+                    .orElseThrow(() -> new AuthorizationServiceException("Role not found by role id: " + roleId));
             roles.add(role);
         }
 
@@ -238,7 +178,7 @@ public class UserService implements UserDetailsService, IUserService {
         List<Role> rolesToRemove = new ArrayList<>();
         for (String roleId : roleIds) {
             var role = roleRepository.findByRoleId(roleId)
-                    .orElseThrow(() -> new ApiException("Role not found by role id: " + roleId));
+                    .orElseThrow(() -> new AuthorizationServiceException("Role not found by role id: " + roleId));
             rolesToRemove.add(role);
         }
 
@@ -248,7 +188,4 @@ public class UserService implements UserDetailsService, IUserService {
         return GlobalResponse.success(Boolean.TRUE);
     }
 
-    private String encodePassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
 }

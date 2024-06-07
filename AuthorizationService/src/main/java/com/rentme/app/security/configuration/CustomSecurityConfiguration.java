@@ -18,6 +18,10 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 @Configuration
 public class CustomSecurityConfiguration {
 
+    private static final String[] PUBLIC_URI = {
+            "/login", "/css/**", "/js/**", "/authentication/**", "/ping"
+    };
+
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -26,7 +30,7 @@ public class CustomSecurityConfiguration {
                 .oidc(Customizer.withDefaults());
 
         http.exceptionHandling(ex -> ex.defaultAuthenticationEntryPointFor(
-                        new LoginUrlAuthenticationEntryPoint("/login"),
+                        new LoginUrlAuthenticationEntryPoint("/authentication/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
         );
@@ -37,20 +41,20 @@ public class CustomSecurityConfiguration {
     @Bean
     @Order(2)
     public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(Customizer.withDefaults());
-        http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/authentication/**")
+        http.formLogin(form -> form
+                .loginPage("/authentication/login")
+                .permitAll()
         );
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/authentication/**",
-                                "/ping").permitAll() // Make the register URL publicly accessible
-                        .anyRequest().authenticated() // Ensure all other requests are authenticated
+
+        http.authorizeRequests(authorize -> authorize
+                        .requestMatchers(PUBLIC_URI).permitAll() // Permit access to public URLs
+                        .anyRequest().authenticated() // Require authentication for other requests
                 )
                 .logout(logout -> logout
-                        .permitAll()
-                );
+                        .logoutSuccessUrl("/login?logout") // Redirect to login page after logout
+                        .permitAll() // Allow access to log-out URL
+                )
+                .csrf(csrf -> csrf.disable()); // Disable CSRF for simplicity
 
         return http.build();
     }

@@ -2,7 +2,7 @@ package com.rentme.app.user.model;
 
 import com.rentme.app.role.entity.Role;
 import com.rentme.app.user.entity.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PrincipleUser implements UserDetails {
 
     private final User user;
@@ -51,6 +51,6 @@ public class PrincipleUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.isEnabled();
     }
 }

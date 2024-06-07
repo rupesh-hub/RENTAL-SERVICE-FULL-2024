@@ -64,7 +64,8 @@ public class User {
         return firstName + " " + lastName;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Address> addressList;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
 }

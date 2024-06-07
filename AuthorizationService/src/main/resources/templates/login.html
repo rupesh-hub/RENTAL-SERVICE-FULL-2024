@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 500px;
+        }
+        .left-section, .right-section {
+            flex: 1;
+            padding: 20px;
+        }
+        .left-section {
+            background-color: #fafafa;
+            border-right: 1px solid #e0e0e0;
+        }
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #250101;
+        }
+        .login-container {
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .social-login-header {
+            position: relative;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #000;
+            padding: 7px;
+            width: 100%;
+        }
+
+        .social-login-header::before,
+        .social-login-header::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+            border-bottom: 1px dashed #000;
+            transform: translateY(-50%);
+        }
+
+        .social-login-header::before {
+            left: 0;
+        }
+
+        .social-login-header::after {
+            right: 0;
+        }
+
+        label {
+            font-weight: 400;
+        }
+        .login-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .input-field {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-field input[type=text], .input-field input[type=password] {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 12px 10px 12px 40px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            background: #f6d1f6;
+        }
+        .input-field input[type=text]:focus, .input-field input[type=password]:focus {
+            border-color: #3f51b5;
+            box-shadow: none;
+        }
+        .input-field label {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #777;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+        .input-field input[type=text]:focus + label, .input-field input[type=password]:focus + label,
+        .input-field input[type=text]:not(:placeholder-shown) + label, .input-field input[type=password]:not(:placeholder-shown) + label {
+            top: 0;
+            left: 40px;
+            font-size: 12px;
+            color: #3f51b5;
+        }
+        .input-field .material-icons {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            background-color: #3f51b5;
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 16px;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-social{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn:hover {
+            background-color: #303f9f;
+        }
+        .btn .material-icons {
+            margin-left: 8px;
+        }
+        .social-login-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .social-login-buttons .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .social-login-header {
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #fff;
+            padding: 7px;
+            width: 100%;
+            position: relative;
+        }
+        .social-login-header::before, .social-login-header::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #fff;
+        }
+        .social-login-header::before {
+            left: 0;
+        }
+        .social-login-header::after {
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left-section">
+        <div class="login-container">
+            <h1>Login</h1>
+            <form th:action="@{/authentication/login}" method="post">
+                <div class="input-field">
+                    <i class="material-icons">person</i>
+                    <input type="text" id="username" name="username" required placeholder=" ">
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-field">
+                    <i class="material-icons">lock</i>
+                    <input type="password" id="password" name="password" required placeholder=" ">
+                    <label for="password">Password</label>
+                </div>
+                <button class="btn waves-effect waves-light login-btn" type="submit">Login
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+            <div class="login-footer">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+        </div>
+    </div>
+    <div class="right-section">
+        <div class="social-login-buttons">
+            <div class="social-login-header">Other Login Options</div>
+            <button class="btn waves-effect waves-light btn-social" type="button" style="background-color: #db4437;">Login with Google
+                <i class="material-icons right">google</i>
+            </button>
+            <button class="btn waves-effect waves-light btn-social" type="button" style="background-color: #3b5998;">Login with Facebook
+                <i class="material-icons right">facebook</i>
+            </button>
+            <button class="btn waves-effect waves-light btn-social" type="button" style="background-color: #1da1f2;">Login with Twitter
+                <i class="material-icons right">twitter</i>
+            </button>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

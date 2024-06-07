@@ -13,6 +13,6 @@ public record UserResponse(
         String email,
         boolean enabled,
         List<RoleResponse> roles,
-        List<AddressResponse> addresses
+        AddressResponse address
 ) {
 }

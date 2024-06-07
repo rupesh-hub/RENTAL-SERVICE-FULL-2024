@@ -33,7 +33,7 @@ public class Address {
     private String street;
     private long zip;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "address")
     private User user;
 
 }

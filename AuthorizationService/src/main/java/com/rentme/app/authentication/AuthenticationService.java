@@ -69,7 +69,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         // Set address
         Address address = AddressMapper.toEntity(request.address());
-        user.setAddressList(List.of(address));
+        user.setAddress(address);
 
         // Set role
         var role = roleRepository.findByRole("USER")

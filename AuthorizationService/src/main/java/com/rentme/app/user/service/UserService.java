@@ -16,11 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService, IUserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
     @Override
@@ -48,10 +47,9 @@ public class UserService implements UserDetailsService, IUserService {
                                         .stream()
                                         .map(RoleMapper::toResponse)
                                         .collect(Collectors.toList()),
-                                user.getAddressList()
-                                        .stream()
+                                Optional.of(user.getAddress())
                                         .map(AddressMapper::toResponse)
-                                        .collect(Collectors.toList())
+                                        .orElse(null)
                         )
                 )
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by username: " + username));
@@ -70,10 +68,9 @@ public class UserService implements UserDetailsService, IUserService {
                                         .stream()
                                         .map(RoleMapper::toResponse)
                                         .collect(Collectors.toList()),
-                                user.getAddressList()
-                                        .stream()
+                                Optional.of(user.getAddress())
                                         .map(AddressMapper::toResponse)
-                                        .collect(Collectors.toList())
+                                        .orElse(null)
                         )
                 )
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by email: " + email));
@@ -92,10 +89,9 @@ public class UserService implements UserDetailsService, IUserService {
                                         .stream()
                                         .map(RoleMapper::toResponse)
                                         .collect(Collectors.toList()),
-                                user.getAddressList()
-                                        .stream()
+                                Optional.of(user.getAddress())
                                         .map(AddressMapper::toResponse)
-                                        .collect(Collectors.toList())
+                                        .orElse(null)
                         )
                 )
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by user id: " + userId));
@@ -114,10 +110,9 @@ public class UserService implements UserDetailsService, IUserService {
                                         .stream()
                                         .map(RoleMapper::toResponse)
                                         .collect(Collectors.toList()),
-                                user.getAddressList()
-                                        .stream()
+                                Optional.of(user.getAddress())
                                         .map(AddressMapper::toResponse)
-                                        .collect(Collectors.toList())
+                                        .orElse(null)
                         )
                 )
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by id."));

@@ -8,10 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @Tag(name = "authentication")
 @RequestMapping("/authentication")
 @RequiredArgsConstructor
@@ -20,10 +21,16 @@ public class AuthenticationResource {
     private final IAuthenticationService authenticationService;
 
     @PostMapping("/register")
+    @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<GlobalResponse<Void>> save(@RequestBody @Valid RegistrationRequest request)
             throws MethodArgumentNotValidException {
         return ResponseEntity.ok(authenticationService.register(request));
+    }
+
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
     }
 
 }

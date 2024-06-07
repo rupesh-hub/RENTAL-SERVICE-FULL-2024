@@ -41,7 +41,7 @@ public final class UserMapper {
 
     public static UserResponse toResponse(User user,
                                           List<RoleResponse> roles,
-                                          List<AddressResponse> addresses) {
+                                          AddressResponse address) {
         return new UserResponse(
                 user.getUserId(),
                 user.getFirstName(),
@@ -50,7 +50,7 @@ public final class UserMapper {
                 user.getEmail(),
                 user.isEnabled(),
                 roles,
-                addresses
+                address
         );
     }
 

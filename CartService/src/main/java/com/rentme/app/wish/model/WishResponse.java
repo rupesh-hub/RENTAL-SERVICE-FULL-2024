@@ -1,6 +1,7 @@
 package com.rentme.app.wish.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rentme.app.client.ProductResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class WishResponse {
 
     private Long id;
-    //    private ProductResponse product;
+    private ProductResponse product;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

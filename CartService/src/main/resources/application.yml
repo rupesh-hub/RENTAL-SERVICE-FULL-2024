@@ -1,8 +1,10 @@
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
   application:
-    name: CART_SERVICE
+    name: cart-service
 
-server:
-  port: 8484
-  servlet:
-    context-path: /cart-api/v1.0.0
+application:
+  config:
+    product-url: http://localhost:9090/product-api/v1.0.0
+    authorization-url: http://localhost:8080

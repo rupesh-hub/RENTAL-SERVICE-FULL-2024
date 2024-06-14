@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface WishRepository extends JpaRepository<Wish, Long> {
 
     @Query(name="Wish.findByProductIdAndUserId")
-    Optional<Wish> findByProductIdAndUserId(@Param("productId") String productId, @Param("userId") String userId);
+    Optional<Wish> findByProductIdAndUsername(@Param("productId") String productId, @Param("username") String username);
 
     @Query(name="Wish.findByUserId")
     Page<Wish> findByUserId(@Param("userId") String userId, Pageable pageable);

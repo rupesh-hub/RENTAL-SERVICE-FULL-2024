@@ -18,11 +18,6 @@ public record OrderRequest(
         @NotNull(message = "Payment method should not be null.")
         PaymentMethod paymentMethod,
 
-        @NotNull(message = "Customer should be present.")
-        @NotEmpty(message = "Customer should be present.")
-        @NotBlank(message = "Customer should be present.")
-        String customerId,
-
         @NotEmpty(message="You should at least purchase one product.")
         List<PurchaseRequest> products
 ) {

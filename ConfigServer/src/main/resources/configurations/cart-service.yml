@@ -1,0 +1,35 @@
+server:
+  port: 8484
+  servlet:
+    context-path: /cart-api/v1.0.0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cart_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+
+  hibernate:
+    naming:
+      physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type: trace

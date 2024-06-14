@@ -13,10 +13,10 @@ import java.util.Optional;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query(name="Cart.findByProductIdAndUserId")
-    Optional<Cart> findByProductIdAndUserId(@Param("productId") String productId, @Param("userId") String userId);
+    @Query(name="Cart.findByProductIdAndUsername")
+    Optional<Cart> findByProductIdAndUserId(@Param("productId") String productId, @Param("username") String username);
 
-    @Query(name="Cart.findByUserId")
-    Page<Cart> findByUserId(@Param("userId") String userId, Pageable pageable);
+    @Query(name="Cart.findByUsername")
+    Page<Cart> findByUsername(@Param("username") String username, Pageable pageable);
 
 }

@@ -2,7 +2,11 @@ package com.rentme.app.cart.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,10 +17,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "_product_cart")
 @EntityListeners(AuditingEntityListener.class)
 @NamedQueries({
-        @NamedQuery(name = "Cart.findByProductIdAndUserId",
-                query = "SELECT c FROM Cart c WHERE c.productId = :productId AND c.userId = :userId"),
-        @NamedQuery(name = "Cart.findByUserId",
-                query = "SELECT c FROM Cart c WHERE c.userId = :userId")
+        @NamedQuery(name = "Cart.findByProductIdAndUsername",
+                query = "SELECT c FROM Cart c WHERE c.productId = :productId AND c.username = :username"),
+        @NamedQuery(name = "Cart.findByUsername",
+                query = "SELECT c FROM Cart c WHERE c.username = :username")
 })
 public class Cart {
 
@@ -32,7 +36,15 @@ public class Cart {
     private Long id;
 
     private String productId;
-    private String userId;
+    private String username;
     private int quantity;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime modifiedOn;
 
 }

@@ -8,13 +8,13 @@ import java.util.Optional;
 
 @FeignClient(
         name = "customer-service",
-        url = "${application.config.authotization-url}"
+        url = "${application.config.authorization-url}"
 )
 public interface CustomerClient {
 
-    @GetMapping("/{customer-id}")
-    Optional<CustomerResponse> findCustomerById(
-            @PathVariable("customer-id") String customerId
+    @GetMapping("/users/by.username/(username}")
+    Optional<CustomerResponse> findUserByUsername(
+            @PathVariable("username") String username
     );
 
 }

@@ -45,6 +45,6 @@ logging:
 
 application:
   config:
-    authorization-url: http://localhost:authorization-service/auth-api/v1.0.0
+    authorization-url: http://localhost:authorization-service
     product-url: http://localhost:product-service/product-api/v1.0.0
     payment-url: http://localhost:payment-service/payment-api/v1.0.0

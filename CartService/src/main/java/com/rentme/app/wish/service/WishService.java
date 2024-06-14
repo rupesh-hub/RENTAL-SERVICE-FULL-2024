@@ -1,6 +1,7 @@
 package com.rentme.app.wish.service;
 
-import com.rentme.app.exception.ApiException;
+import com.rentme.app.client.ProductClient;
+import com.rentme.app.exception.CartServiceException;
 import com.rentme.app.util.GlobalResponse;
 import com.rentme.app.util.Paging;
 import com.rentme.app.wish.entity.Wish;
@@ -20,6 +21,7 @@ import java.util.List;
 public class WishService implements IWishService {
 
     private final WishRepository wishRepository;
+    private final ProductClient productClient;
 
     @Override
     public GlobalResponse<Void> add(WishRequest request, Principal principal) {
@@ -27,6 +29,7 @@ public class WishService implements IWishService {
         var wish = Wish
                 .builder()
                 .productId(request.getProductId())
+                .username(principal.getName())
                 .build();
 
         wishRepository.save(wish);
@@ -35,15 +38,21 @@ public class WishService implements IWishService {
     }
 
     @Override
-    public GlobalResponse<List<WishResponse>> getByUserId(int page, int size, Principal principal) {
+    public GlobalResponse<List<WishResponse>> getByUsername(int page, int size, Principal principal) {
 
-        Page<Wish> wishPage = wishRepository.findByUserId("user.getId()", PageRequest.of(page, size));
+        Page<Wish> wishPage = wishRepository.findByUserId(principal.getName(), PageRequest.of(page, size));
 
         var response = wishPage.getContent()
                 .stream()
                 .map(item -> WishResponse
                         .builder()
                         .id(item.getId())
+                        .createdAt(item.getCreatedAt())
+                        .updatedAt(item.getModifiedOn())
+                        .product(
+                                productClient.getById(item.getId())
+                                        .getData()
+                        )
                         .build())
                 .toList();
 
@@ -60,13 +69,22 @@ public class WishService implements IWishService {
     }
 
     @Override
-    public GlobalResponse<WishResponse> getByProductIdAndUSerId(String productId, Principal principal) {
-        var response = wishRepository.findByProductIdAndUserId(productId, "")
-                .map(item -> WishResponse
-                        .builder()
-                        .id(item.getId())
-                        .build())
-                .orElseThrow(() -> new ApiException("No item found."));
+    public GlobalResponse<WishResponse> getByProductIdAndUsername(String productId, Principal principal) {
+
+        var response = wishRepository.findByProductIdAndUsername(productId, principal.getName())
+                .map(item ->
+                        WishResponse
+                                .builder()
+                                .id(item.getId())
+                                .createdAt(item.getCreatedAt())
+                                .updatedAt(item.getModifiedOn())
+                                .product(
+                                        productClient.getById(item.getId())
+                                                .getData()
+                                )
+                                .build()
+                )
+                .orElseThrow(() -> new CartServiceException("No item found with product id : " + productId));
 
         return GlobalResponse.success(response);
     }

@@ -11,7 +11,7 @@ public interface ICartService {
 
     GlobalResponse<Void> add(CartRequest request, Principal principal);
 
-    GlobalResponse<List<CartResponse>> getByUserId(
+    GlobalResponse<List<CartResponse>> getByUser(
             int page,
             int size,
             Principal principal);

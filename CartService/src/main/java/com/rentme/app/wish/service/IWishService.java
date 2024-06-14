@@ -10,10 +10,10 @@ import java.util.List;
 public interface IWishService {
     GlobalResponse<Void> add(WishRequest request, Principal principal);
 
-    GlobalResponse<List<WishResponse>> getByUserId(
+    GlobalResponse<List<WishResponse>> getByUsername(
             int page,
             int size,
             Principal principal);
 
-    GlobalResponse<WishResponse> getByProductIdAndUSerId(String productId, Principal principal);
+    GlobalResponse<WishResponse> getByProductIdAndUsername(String productId, Principal principal);
 }

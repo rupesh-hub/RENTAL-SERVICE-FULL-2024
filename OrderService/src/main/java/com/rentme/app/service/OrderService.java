@@ -13,6 +13,7 @@ import com.rentme.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +27,10 @@ public class OrderService {
     private final OrderLineService orderLineService;
     private final OrderEventProducer orderEventProducer;
 
-    public String createOrder(OrderRequest request) {
+    public String createOrder(OrderRequest request, Principal principal) {
 
         //check the customer : OpenFeign
-        var customer = customerClient.findCustomerById(request.customerId())
+        var customer = customerClient.findUserByUsername(principal.getName())
                 .orElseThrow();
 
         //purchase the products : product ms : RestTemplate
@@ -74,13 +75,13 @@ public class OrderService {
 
     }
 
-    private static Order toOrder(OrderRequest request) {
+    private static Order toOrder(OrderRequest request, String username) {
 
         return Order
                 .builder()
                 .id(request.id())
-                .customerId(request.customerId())
-                .reference(request.customerId())
+                .customerId(username)
+                .reference(username)
                 .totalAmount(request.amount())
                 .paymentMethod(request.paymentMethod())
                 .build();

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -22,8 +23,9 @@ public class CartResource {
 
     private final ICartService cartService;
 
-    @PostMapping
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<GlobalResponse<Void>> add(
             @RequestBody @Valid CartRequest request,
             Principal principal) {
@@ -31,20 +33,22 @@ public class CartResource {
         return ResponseEntity.accepted().build();
     }
 
-    @GetMapping("/by.userId")
+    @GetMapping("/by.user")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<GlobalResponse<List<CartResponse>>> getByUserId(
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<GlobalResponse<List<CartResponse>>> getByUser(
             Principal principal,
             @RequestParam(name="page", defaultValue = "0") int page,
             @RequestParam(name="size", defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(
-                cartService.getByUserId(page, size, principal)
+                cartService.getByUser(page, size, principal)
         );
     }
 
     @GetMapping("/by.userId/productId/{productId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<GlobalResponse<CartResponse>> getByUserId(
             @PathVariable String productId,
             Principal principal
@@ -53,5 +57,11 @@ public class CartResource {
                 cartService.getByProductIdAndUSerId(productId, principal)
         );
     }
+
+    //delete cart item
+
+    //update cart item quantity
+
+    //clear cart
 
 }

@@ -1,7 +1,7 @@
 server:
-  port: 8282
-  servlet:
-    context-path: /authorization-api/v1.0.0
+  port: 8080
+#  servlet:
+#    context-path: /authorization-api/v1.0.0
 
 spring:
   datasource:

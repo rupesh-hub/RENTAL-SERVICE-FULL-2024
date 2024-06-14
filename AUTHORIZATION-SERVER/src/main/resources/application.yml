@@ -1,6 +1,7 @@
 spring:
   application:
     name: authorization-server
+
   datasource:
     url: jdbc:postgresql://localhost:5432/auth_db
     username: postgres
@@ -8,12 +9,25 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    show-sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update # options: none, validate, update, create, create-drop
+    show-sql: true
     properties:
       hibernate:
-        format-sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+
+    naming:
+      physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type: trace
+
+server:
+  port: 8080

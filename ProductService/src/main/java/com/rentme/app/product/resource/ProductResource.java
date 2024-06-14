@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +23,9 @@ public class ProductResource {
 
     private final IProductService productService;
 
-    @PostMapping
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ROLE_OWNER')")
     public ResponseEntity<GlobalResponse<Void>> save(@RequestBody @Valid ProductRequest request) {
         return ResponseEntity.ok(productService.save(request));
     }
@@ -34,7 +36,7 @@ public class ProductResource {
         return ResponseEntity.ok(productService.findById(id));
     }
 
-    @GetMapping
+    @GetMapping("/get.all")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<GlobalResponse<List<ProductResponse>>> getAll(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -54,14 +56,16 @@ public class ProductResource {
     }
 
 
-    @PutMapping
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('ROLE_OWNER')")
     public ResponseEntity<GlobalResponse<Void>> update(@RequestBody ProductRequest request,
                                                        @RequestParam(name = "id") Long id) {
 
         return ResponseEntity.ok(productService.update(request, id));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('ROLE_OWNER')")
     public ResponseEntity<GlobalResponse<Void>> delete(@RequestParam(name = "id") Long id) {
         return ResponseEntity.ok(productService.delete(id));
     }

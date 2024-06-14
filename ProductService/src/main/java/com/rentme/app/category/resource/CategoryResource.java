@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class CategoryResource {
 
     private final ICategoryService categoryService;
 
-    @PostMapping
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<Void>> save(@RequestBody CategoryRequest category) {
         categoryService.save(category);
         return ResponseEntity.ok(
@@ -36,9 +38,9 @@ public class CategoryResource {
         );
     }
 
-    @GetMapping
+    @GetMapping("/get.all")
     public ResponseEntity<GlobalResponse<List<CategoryResponse>>> getAll(
-            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(
@@ -53,7 +55,8 @@ public class CategoryResource {
         );
     }
 
-    @PutMapping
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<Void>> update(
             @RequestBody CategoryRequest request,
             @RequestParam(name = "id") Long id
@@ -63,7 +66,8 @@ public class CategoryResource {
         );
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<GlobalResponse<Void>> delete(
             @RequestParam(name = "id") Long id
     ) {

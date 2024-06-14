@@ -16,6 +16,21 @@ import java.util.List;
 @EnableMethodSecurity(proxyTargetClass = true)
 public class CustomSecurityConfiguration {
 
+    private static final String[] PUBLIC_URL = {
+            "/ping",
+            "/categories/by.id/**",
+            "/categories/get.all",
+            "/categories/by.name/**",
+            "/products/by.id/**",
+            "/products/get.all",
+            "/products/by.category/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(c -> {
@@ -31,13 +46,18 @@ public class CustomSecurityConfiguration {
             c.configurationSource(source);
         });
 
-        http.authorizeHttpRequests(auth-> auth.requestMatchers("/ping").permitAll().anyRequest().authenticated())
-                .oauth2ResourceServer(resource-> resource.jwt(jwt->jwt.jwkSetUri("http://localhost:8080/oauth2/jwks")));
+        http.authorizeHttpRequests(
+                        auth -> auth.requestMatchers(PUBLIC_URL)
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                )
+                .oauth2ResourceServer(resource -> resource.jwt(jwt -> jwt.jwkSetUri("http://localhost:8080/oauth2/jwks")));
         return http.build();
     }
 
     @Bean
-    public JwtAuthenticationConverter authenticationConverter(){
+    public JwtAuthenticationConverter authenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
         converter.setAuthoritiesClaimName("authorities");
         converter.setAuthorityPrefix("");

@@ -36,10 +36,10 @@ public class GlobalExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(OrderServiceException.class)
-    public ResponseEntity<ErrorMessage> handleOrderServiceException(OrderServiceException exp, HttpServletRequest servletRequest) {
+    @ExceptionHandler(BookingException.class)
+    public ResponseEntity<ErrorMessage> handleException(BookingException exp, HttpServletRequest servletRequest) {
         return ResponseEntity
-                .status(UNAUTHORIZED)
+                .status(INTERNAL_SERVER_ERROR)
                 .body(
                         new ErrorMessage(
                                 "500",
@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
+    public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
 
         Map<String, String> errors = new HashMap<>();
 

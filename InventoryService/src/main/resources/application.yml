@@ -1,6 +1,8 @@
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
   application:
-    name: INVENTORY_SERVICE
+    name: inventory-service
 
 server:
   port: 8585

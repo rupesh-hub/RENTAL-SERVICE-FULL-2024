@@ -3,8 +3,8 @@ package com.rentme.app.service;
 import com.rentme.app.client.CustomerClient;
 import com.rentme.app.client.ProductClient;
 import com.rentme.app.entity.Order;
+import com.rentme.app.event.EventProducer;
 import com.rentme.app.event.OrderConfirmationEvent;
-import com.rentme.app.event.OrderEventProducer;
 import com.rentme.app.model.OrderLineRequest;
 import com.rentme.app.model.OrderRequest;
 import com.rentme.app.model.OrderResponse;
@@ -25,7 +25,7 @@ public class OrderService {
     private final CustomerClient customerClient;
     private final ProductClient productClient;
     private final OrderLineService orderLineService;
-    private final OrderEventProducer orderEventProducer;
+    private final EventProducer<OrderConfirmationEvent> eventProducer;
 
     public String createOrder(OrderRequest request, Principal principal) {
 
@@ -39,7 +39,7 @@ public class OrderService {
         );
 
         // persist order
-        var order = orderRepository.save(toOrder(request));
+        var order = orderRepository.save(toOrder(request, principal.getName()));
 
         // persist order line
         for (PurchaseRequest purchaseRequest : request.products()) {
@@ -61,7 +61,7 @@ public class OrderService {
 
 
         // send order confirmation : notification ms (kafka)
-        orderEventProducer.sendOrderConfirmationEvent(
+        eventProducer.send(
                 new OrderConfirmationEvent(
                         request.reference(),
                         request.amount(),

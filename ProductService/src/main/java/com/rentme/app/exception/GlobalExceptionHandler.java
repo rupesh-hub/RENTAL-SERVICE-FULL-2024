@@ -3,6 +3,9 @@ package com.rentme.app.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,8 +20,24 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(PaymentException.class)
-    public ResponseEntity<ErrorMessage> handleException(PaymentException exp, HttpServletRequest servletRequest) {
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ErrorMessage> handleException(LockedException exp, HttpServletRequest servletRequest) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        new ErrorMessage(
+                                "401",
+                                "Your account is locked! Please contact admin.",
+                                BAD_REQUEST,
+                                servletRequest.getRequestURI(),
+                                LocalDateTime.now(),
+                                null
+                        )
+                );
+    }
+
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorMessage> handleException(ProductException exp, HttpServletRequest servletRequest) {
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
@@ -33,8 +52,40 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorMessage> handleException(DisabledException exp, HttpServletRequest servletRequest) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        new ErrorMessage(
+                                "401",
+                                "Your account is disabled! Please contact admin.",
+                                BAD_REQUEST,
+                                servletRequest.getRequestURI(),
+                                LocalDateTime.now(),
+                                null
+                        )
+                );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleException(HttpServletRequest servletRequest) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(
+                        new ErrorMessage(
+                                "400",
+                                "Something went wrong!",
+                                BAD_REQUEST,
+                                servletRequest.getRequestURI(),
+                                LocalDateTime.now(),
+                                null
+                        )
+                );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
 
         Map<String, String> errors = new HashMap<>();
 

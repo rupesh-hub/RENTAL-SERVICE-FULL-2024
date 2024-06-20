@@ -19,7 +19,11 @@ public class ProductClient {
 
     private final RestTemplate restTemplate;
 
-    public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> requestBody){
+    /*
+     * Just to confirm if there is product available
+     * Also to check available quantity
+     * */
+    public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> requestBody) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<List<PurchaseRequest>> requestEntity = new HttpEntity<>(
@@ -27,21 +31,21 @@ public class ProductClient {
                 headers
         );
 
-        ParameterizedTypeReference<List<PurchaseResponse>> responseType = new ParameterizedTypeReference<>() {};
+        ParameterizedTypeReference<List<PurchaseResponse>> responseType = new ParameterizedTypeReference<>() {
+        };
         ResponseEntity<List<PurchaseResponse>> responseEntity = restTemplate
                 .exchange(
-                        productUrl+"/purchase",
+                        String.format("%s/products/purchase", productUrl),
                         HttpMethod.POST,
                         requestEntity,
                         responseType
                 );
 
-        if(responseEntity.getStatusCode().isError())
+        if (responseEntity.getStatusCode().isError())
             throw new RuntimeException("An error occurred while processing purchase products.");
 
         return responseEntity.getBody();
     }
-
 
 
 }

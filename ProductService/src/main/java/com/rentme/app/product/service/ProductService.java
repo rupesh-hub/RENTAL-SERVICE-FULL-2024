@@ -1,11 +1,13 @@
 package com.rentme.app.product.service;
 
 import com.rentme.app.category.repository.CategoryRepository;
-import com.rentme.app.exception.ApiException;
+import com.rentme.app.exception.ProductException;
 import com.rentme.app.product.entity.Product;
 import com.rentme.app.product.mapper.ProductMapper;
 import com.rentme.app.product.model.ProductRequest;
 import com.rentme.app.product.model.ProductResponse;
+import com.rentme.app.product.model.PurchaseRequest;
+import com.rentme.app.product.model.PurchaseResponse;
 import com.rentme.app.product.repository.ProductRepository;
 import com.rentme.app.util.GlobalResponse;
 import com.rentme.app.util.Paging;
@@ -28,7 +30,7 @@ public class ProductService implements IProductService {
 
         String categoryName = request.getCategory();
         var category = categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new ApiException("Category not found by name " + categoryName));
+                .orElseThrow(() -> new ProductException("Category not found by name " + categoryName));
 
         var product = ProductMapper.toEntity(request);
         product.setCategory(category);
@@ -41,7 +43,7 @@ public class ProductService implements IProductService {
     public GlobalResponse<ProductResponse> findById(Long id) {
         var product = productRepository
                 .findById(id)
-                .orElseThrow(() -> new ApiException("Product by " + id + " is not found."));
+                .orElseThrow(() -> new ProductException("Product by " + id + " is not found."));
         return GlobalResponse.success(ProductMapper.toResponse(product));
     }
 
@@ -72,7 +74,7 @@ public class ProductService implements IProductService {
     public GlobalResponse<Void> delete(Long id) {
         var product = productRepository
                 .findById(id)
-                .orElseThrow(() -> new ApiException("Product by " + id + " is not found."));
+                .orElseThrow(() -> new ProductException("Product by " + id + " is not found."));
         productRepository.delete(product);
         return GlobalResponse.success();
     }
@@ -81,7 +83,7 @@ public class ProductService implements IProductService {
     public GlobalResponse<Void> update(ProductRequest request, Long id) {
         var product = productRepository
                 .findById(id)
-                .orElseThrow(() -> new ApiException("Product by " + id + " is not found."));
+                .orElseThrow(() -> new ProductException("Product by " + id + " is not found."));
 
         product.setName(request.getName());
         product.setPrice(request.getPrice());
@@ -111,6 +113,11 @@ public class ProductService implements IProductService {
                         .last(productPage.isLast())
                         .build()
         );
+    }
+
+    @Override
+    public GlobalResponse<PurchaseResponse> purchase(PurchaseRequest request) {
+        return null;
     }
 
 }

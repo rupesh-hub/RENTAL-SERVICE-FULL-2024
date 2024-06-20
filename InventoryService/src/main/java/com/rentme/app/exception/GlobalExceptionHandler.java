@@ -17,10 +17,10 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(PaymentException.class)
-    public ResponseEntity<ErrorMessage> handleException(PaymentException exp, HttpServletRequest servletRequest) {
+    @ExceptionHandler(InventoryException.class)
+    public ResponseEntity<ErrorMessage> handleCartServiceException(InventoryException exp, HttpServletRequest servletRequest) {
         return ResponseEntity
-                .status(INTERNAL_SERVER_ERROR)
+                .status(UNAUTHORIZED)
                 .body(
                         new ErrorMessage(
                                 "500",
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> handleException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp, HttpServletRequest servletRequest) {
 
         Map<String, String> errors = new HashMap<>();
 

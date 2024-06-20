@@ -5,7 +5,7 @@ import com.rentme.app.category.mapper.CategoryMapper;
 import com.rentme.app.category.model.CategoryRequest;
 import com.rentme.app.category.model.CategoryResponse;
 import com.rentme.app.category.repository.CategoryRepository;
-import com.rentme.app.exception.ApiException;
+import com.rentme.app.exception.ProductException;
 import com.rentme.app.util.GlobalResponse;
 import com.rentme.app.util.Paging;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public GlobalResponse<CategoryResponse> findById(Long id) {
         var category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Category is not exists by " + id));
+                .orElseThrow(() -> new ProductException("Category is not exists by " + id));
 
         return
                 GlobalResponse.success(
@@ -42,7 +42,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public GlobalResponse<CategoryResponse> findByName(String name) {
         var category = categoryRepository.findByName(name)
-                .orElseThrow(() -> new ApiException("Category name not exists by " + name));
+                .orElseThrow(() -> new ProductException("Category name not exists by " + name));
 
         return
                 GlobalResponse.success(
@@ -76,7 +76,7 @@ public class CategoryService implements ICategoryService {
     public GlobalResponse<Void> update(CategoryRequest request, Long id) {
 
         var category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Category is not exists by " + id));
+                .orElseThrow(() -> new ProductException("Category is not exists by " + id));
         category.setName(request.getName());
         category.setDescription(request.getDescription());
         categoryRepository.save(category);
@@ -87,7 +87,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public GlobalResponse<Void> delete(Long id) {
         var category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Category is not exists by " + id));
+                .orElseThrow(() -> new ProductException("Category is not exists by " + id));
 
         categoryRepository.delete(category);
 

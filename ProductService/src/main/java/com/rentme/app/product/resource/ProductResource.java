@@ -2,6 +2,8 @@ package com.rentme.app.product.resource;
 
 import com.rentme.app.product.model.ProductRequest;
 import com.rentme.app.product.model.ProductResponse;
+import com.rentme.app.product.model.PurchaseRequest;
+import com.rentme.app.product.model.PurchaseResponse;
 import com.rentme.app.product.service.IProductService;
 import com.rentme.app.util.GlobalResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,5 +72,10 @@ public class ProductResource {
         return ResponseEntity.ok(productService.delete(id));
     }
 
+    @PostMapping("/purchase")
+    @PreAuthorize("hasAuthority('ROLE_OWNER')")
+    public ResponseEntity<GlobalResponse<PurchaseResponse>> purchase(@RequestBody PurchaseRequest request) {
+        return ResponseEntity.ok(productService.purchase(request));
+    }
 
 }

@@ -6,6 +6,7 @@ import org.apache.kafka.common.internals.Topic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
+import org.springframework.kafka.core.KafkaAdmin;
 
 @Configuration
 public class KafkaOrderTopicConfig {

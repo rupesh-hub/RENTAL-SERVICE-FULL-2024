@@ -1,4 +1,4 @@
-package com.rentme.app.event;
+package com.rentme.app.event.producer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,17 +11,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderEventProducer implements EventProducer<OrderConfirmationEvent> {
+public class PaymentConfirmationEventProducer implements EventProducer<PaymentConfirmationEvent> {
 
-    private final KafkaTemplate<String, OrderConfirmationEvent> kafkaTemplate;
+
+    private final KafkaTemplate<String, PaymentConfirmationEvent> kafkaTemplate;
 
     @Override
-    public void send(OrderConfirmationEvent data) {
-        log.info("Sending order confirmation...");
-        Message<OrderConfirmationEvent> message = MessageBuilder
+    public void send(PaymentConfirmationEvent data) {
+        log.info("Sending payment confirmation...");
+        Message<PaymentConfirmationEvent> message = MessageBuilder
                 .withPayload(data)
-                .setHeader(KafkaHeaders.TOPIC, Topics.ORDER_CONFIRMATION.name())
+                .setHeader(KafkaHeaders.TOPIC, "payment-confirmation")
                 .build();
         kafkaTemplate.send(message);
     }
+
 }

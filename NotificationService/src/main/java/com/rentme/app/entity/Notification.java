@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_notification_sequence_gen")
-    @SequenceGenerator(name = "_notification_sequence_gen", sequenceName = "_notification_sequence_gen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_notification_id_sequence_gen")
+    @SequenceGenerator(name = "_notification_id_sequence_gen", sequenceName = "_notification_id_sequence_gen", initialValue = 1, allocationSize = 1)
     @Column(name="id", nullable = false, updatable = false, unique = true)
     private Long id;
 

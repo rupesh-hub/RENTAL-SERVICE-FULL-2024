@@ -19,9 +19,6 @@ import java.util.List;
 @Entity
 @Table(name = "_orders")
 @EntityListeners(AuditingEntityListener.class)
-//@NamedQueries({
-//        @NamedQuery(name = "Order.findByCategory", query = "SELECT p FROM Product p WHERE p.category.name = :category")
-//})
 public class Order {
 
     @Id

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -21,6 +22,7 @@ public class OrderResource {
     private final OrderService orderService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> createOrder(
             @RequestBody @Valid final OrderRequest request,
             Principal principal
@@ -29,11 +31,13 @@ public class OrderResource {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<OrderResponse>> findAll(){
         return ResponseEntity.ok(orderService.findAll());
     }
 
     @GetMapping("/{orderId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<OrderResponse> findByOrderId(
             @PathVariable Long orderId
     ){

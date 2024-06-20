@@ -3,8 +3,10 @@ package com.rentme.app.service;
 import com.rentme.app.client.CustomerClient;
 import com.rentme.app.client.ProductClient;
 import com.rentme.app.entity.Order;
+import com.rentme.app.enumeration.PaymentMethod;
 import com.rentme.app.event.EventProducer;
 import com.rentme.app.event.OrderConfirmationEvent;
+import com.rentme.app.event.PaymentRequestEvent;
 import com.rentme.app.model.OrderLineRequest;
 import com.rentme.app.model.OrderRequest;
 import com.rentme.app.model.OrderResponse;
@@ -13,6 +15,7 @@ import com.rentme.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderLineService orderLineService;
     private final EventProducer<OrderConfirmationEvent> eventProducer;
+    private final EventProducer<PaymentRequestEvent> paymentEventProducer;
 
     public String createOrder(OrderRequest request, Principal principal) {
 
@@ -54,10 +58,13 @@ public class OrderService {
         }
 
         //start payment process : payment ms
-        // --> event driven microservice communication using kafka
-        //prepare payment request
-        //prepare payment event producer
-        //send message to producer: paymentRequest
+        paymentEventProducer.send(
+                new PaymentRequestEvent(
+                        principal.getName(),
+                        request.products(),
+                        PaymentMethod.CASH_ON_DELIVERY
+                )
+        );
 
 
         // send order confirmation : notification ms (kafka)

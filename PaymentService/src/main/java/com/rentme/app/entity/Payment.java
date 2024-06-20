@@ -27,13 +27,12 @@ public class Payment {
     private Long id;
 
     private String user;
-    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    private int quantity;
     private String product;
+    private String purchase;
 
     //billing address
     //credit card information

@@ -31,7 +31,7 @@ spring:
   kafka:
     producer:
       bootstrap-servers: localhost:9092
-      key-serializer: org.apache.common.serializer.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.type.mapping: orderConfirmation:com.rentme.app.event.OrderConfirmationEvent
@@ -45,6 +45,6 @@ logging:
 
 application:
   config:
-    authorization-url: http://localhost:authorization-service
+    authorization-url: http://localhost:8080
     product-url: http://localhost:product-service/product-api/v1.0.0
     payment-url: http://localhost:payment-service/payment-api/v1.0.0

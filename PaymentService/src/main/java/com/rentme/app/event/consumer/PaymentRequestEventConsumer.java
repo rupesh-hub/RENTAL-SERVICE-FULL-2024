@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rentme.app.client.CustomerClient;
 import com.rentme.app.client.ProductClient;
+import com.rentme.app.client.ProductResponse;
 import com.rentme.app.entity.Payment;
 import com.rentme.app.enumeration.PaymentMethod;
 import com.rentme.app.event.producer.EventProducer;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,22 +44,25 @@ public class PaymentRequestEventConsumer implements EventConsumer<PaymentRequest
                 .orElseThrow(() -> new PaymentException("Invalid user"));
 
         // fetch product
-        var product = productClient.getById(Long.parseLong(request.productId()))
-                .getBody()
-                .getData();
-
+        var productResponses =
+        request.purchaseRequests()
+                .stream()
+                .map(purchaseRequest -> productClient.getById(Long.parseLong(purchaseRequest.productId()))
+                            .getBody()
+                            .getData()
+                )
+                .collect(Collectors.toList());
 
         // process payment
 
-        var productJson = toJsonString(product);
+        var productJson = toJsonString(productResponses);
         var userJson = toJsonString(user);
 
         // save log to db
         paymentRepository.save(
                 Payment.builder()
-                        .amount(request.amount())
                         .paymentMethod(request.paymentMethod())
-                        .quantity(request.quantity())
+                        .product(toJsonString(request.purchaseRequests()))
                         .product(productJson)
                         .user(userJson)
                         .build()
@@ -64,7 +71,7 @@ public class PaymentRequestEventConsumer implements EventConsumer<PaymentRequest
         // send notification
         eventProducer.send(
                 new PaymentConfirmationEvent(
-                        "",
+                        "Payment has been done.",
                         LocalDateTime.now(),
                         "SUCCESS",
                         BigDecimal.ZERO,

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rentme.app.client.CustomerClient;
 import com.rentme.app.client.ProductClient;
-import com.rentme.app.client.ProductResponse;
 import com.rentme.app.entity.Payment;
-import com.rentme.app.enumeration.PaymentMethod;
 import com.rentme.app.event.producer.EventProducer;
 import com.rentme.app.event.producer.PaymentConfirmationEvent;
 import com.rentme.app.exception.PaymentException;
@@ -18,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,9 +31,6 @@ public class PaymentRequestEventConsumer implements EventConsumer<PaymentRequest
     @KafkaListener(topics = {"payment-request"})
     @Override
     public void consume(PaymentRequestEvent request) {
-        // validate request
-        // check payment method
-        // check amount
 
         // fetch user
         var user = customerClient.findUserByUsername(request.username())
@@ -54,7 +47,6 @@ public class PaymentRequestEventConsumer implements EventConsumer<PaymentRequest
                 .collect(Collectors.toList());
 
         // process payment
-
         var productJson = toJsonString(productResponses);
         var userJson = toJsonString(user);
 

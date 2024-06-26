@@ -1,0 +1,38 @@
+<p-menubar [model]="items">
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-4">
+        <p-iconField iconPosition="left">
+          <p-inputIcon styleClass="pi pi-search" />
+          <input type="text" pInputText placeholder="Search" class="w-15rem" />
+        </p-iconField>
+  
+        @if(isLoggedIn) {
+        <i class="pi pi-comment text-xl" pBadge value="2" severity="warning"></i>
+  
+        <i class="pi pi-bell text-xl" pBadge value="2" severity="danger"></i>
+  
+        <i class="pi pi-heart text-xl" pBadge value="2" severity="success"></i>
+  
+        <div class="flex align-items-center">
+          <p-avatar
+            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+            styleClass="mr-2"
+            shape="circle"
+          />
+          <span class="font-bold" > Elsner </span>
+        </div>
+  
+        } @else {
+        <p-button
+          label="Login"
+          icon="pi pi-sign-in"
+          iconPos="right"
+          outlined="true"
+          size="small"
+          (click)="login()"
+        />
+        }
+      </div>
+    </ng-template>
+  </p-menubar>
+  

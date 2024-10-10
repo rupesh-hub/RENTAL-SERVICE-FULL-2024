@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: CHAT-SERVICE
+
+#  datasource:
+#    url: jdbc:h2:file:/Users/rupeshdulal/test;AUTO_SERVER=TRUE;IFEXISTS=FALSE# in-memory database
+#    driver-class-name: org.h2.Driver
+#    username: sa  # Default username for H2
+#    password: password  # Set your desired password
+#
+#  h2:
+#    console:
+#      enabled: true  # Enable H2 console
+#      path: /h2-console  # H2 console path, accessible in a browser
+#  jpa:
+#    hibernate:
+#      ddl-auto: create  # Options: 'create', 'update', 'validate', 'none'
+#    show-sql: true  # Show SQL queries in logs
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect  # Latest H2 dialect
+#        format_sql: true  # Format SQL queries for better readability
+#  sql:
+#    init:
+#      mode: always
+#      platform: h2
+#      schema-locations: classpath:import.sql
+#      scripts:
+#        - classpath:schema.sql
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chat
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+

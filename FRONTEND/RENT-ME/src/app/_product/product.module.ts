@@ -6,6 +6,9 @@ import { ProductCardComponent } from './product-card/product-card.component';
 import { RouterModule, Routes } from '@angular/router';
 import { DataViewModule } from 'primeng/dataview';
 import { Tag, TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
+import { CommentCardComponent } from './comment-card/comment-card.component';
 
 const routes: Routes = [
   { path: 'products/all', component: ListProductComponent },
@@ -16,17 +19,22 @@ const routes: Routes = [
   declarations: [
     ListProductComponent,
     ProductDetailComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    CommentCardComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     DataViewModule,
     TagModule,
+    ButtonModule,
+    PaginatorModule
   ],
   exports:[
     DataViewModule,
-    TagModule
+    TagModule,
+    ButtonModule,
+    PaginatorModule
   ]
 })
 export class ProductModule {}

@@ -1,0 +1,75 @@
+<div class="card">
+    <div class="flex flex-column p-4">
+        <!-- Comment List -->
+        <div class="comment-section">
+            <div class="comment" *ngFor="let comment of comments">
+                <div class="flex align-items-start gap-3 mb-3" >
+                    <img class="border-circle" [src]="comment.avatar" alt="avatar" width="50" height="50">
+                    
+                    <div class="flex flex-column">
+                        <div class="flex justify-content-between align-items-center gap-2" style="font-weight: 500; font-style: italic;">
+                            <span class="font-medium text-900">{{ comment.name }}</span>
+                            <span class="text-sm text-secondary">{{ comment.time | date: 'medium' }}</span>
+                        </div>
+                        <p class="text-700 mt-1" style="font-family: 'Inconsolata', monospace;">{{ comment.text }}</p>
+                        <div class="flex align-items-center gap-2 mt-2">
+                            <i [class]="comment.liked?'pi pi-thumbs-up-fill text-success':'pi pi-thumbs-up'" (click)="likeComment(comment)"></i>
+                            <span>{{ comment.likes }}</span>
+                            <i [class]="comment.disliked? 'pi pi-thumbs-down-fill text-danger':'pi pi-thumbs-down'" (click)="dislikeComment(comment)"></i>
+                            <span>{{ comment.dislikes }}</span>
+                            <a href="javascript:void(0)" (click)="toggleReply(comment)">Reply</a>
+                        </div>
+
+                        <!-- reply button -->
+                        <div *ngIf="comment.showReply" class="reply-section mt-3">
+                            <div class="flex gap-3">
+                                <img class="border-circle" [src]="userAvatar" alt="user-avatar" width="30" height="30">
+                                <div class="flex-auto">
+                                    <textarea pInputTextarea [(ngModel)]="comment.replyText" rows="2" placeholder="Reply..." autoResize="true" class="w-full"></textarea>
+                                    <div class="flex justify-content-end mt-2">
+                                        <p-button label="Reply" icon="pi pi-reply" (click)="addReply(comment)" class="p-button-info"></p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- replies -->
+                        <div class="nested-comments mt-3">
+                            <ng-container class="nested-comment" *ngFor="let reply of comment.replies">
+                                <div class="flex align-items-start gap-3 mb-3">
+                                    <img class="border-circle" [src]="reply.avatar" alt="avatar" width="30" height="30">
+                                    <div class="flex flex-column">
+                                        <div class="flex justify-content-between align-items-center gap-2" style="font-weight: 500; font-style: italic;">
+                                            <span class="font-medium text-900">{{ reply.name }}</span>
+                                            <span class="text-sm text-secondary">{{ reply.time | date: 'short' }}</span>
+                                        </div>
+                                        <p class="text-700 mt-1" style="font-family: 'Inconsolata', monospace;">{{ reply.text }}</p>
+                                        <div class="flex align-items-center gap-2 mt-2">
+                                            <i [class]="reply.liked?'pi pi-thumbs-up-fill text-success':'pi pi-thumbs-up'" (click)="likeComment(reply)"></i><span>{{ reply.likes }}</span>
+                                            <i [class]="reply.disliked? 'pi pi-thumbs-down-fill text-danger':'pi pi-thumbs-down'"  (click)="dislikeComment(reply)"></i><span>{{ reply.dislikes }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Comment -->
+        <div class="add-comment mt-4">
+            <div class="flex gap-3">
+                <img class="border-circle" [src]="userAvatar" alt="user-avatar" width="50" height="50">
+                <div class="flex gap-2 justify-content-between align-items-center w-full">
+                    <textarea pInputTextarea [(ngModel)]="newComment" rows="3" placeholder="Add a comment..." autoResize="true" class="w-full pl-2"></textarea>
+                    <div class="flex justify-content-end">
+                        <p-button label="Submit" icon="pi pi-send" (click)="addComment()" class="p-button-info" [severity]="'info'" [raised]="true"></p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

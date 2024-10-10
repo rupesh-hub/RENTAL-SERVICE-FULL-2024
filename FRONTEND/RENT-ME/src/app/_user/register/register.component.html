@@ -1,0 +1,117 @@
+<div
+  class="col-8 mx-auto"
+  style="
+    background: #d4d4d4;
+    margin-top: 40px;
+    border-radius: 4px;
+    padding: 10px;
+  "
+>
+  <div class="flex gap-2">
+    <div class="flex flex-column gap-2">
+      <label for="password">Password</label>
+      <p-password
+        promptLabel="Choose a password"
+        weakLabel="Too simple"
+        mediumLabel="Average complexity"
+        strongLabel="Complex password"
+        [toggleMask]="true"
+      >
+        <ng-template pTemplate="header">
+          <h6>Pick a password</h6>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <p-divider></p-divider>
+          <p class="mt-2">Suggestions</p>
+          <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+            <li>At least one lowercase</li>
+            <li>At least one uppercase</li>
+            <li>At least one numeric</li>
+            <li>Minimum 8 characters</li>
+          </ul>
+        </ng-template>
+      </p-password>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="confirmPassword">Confirm Password</label>
+      <p-password
+        promptLabel="Confirm your password"
+        weakLabel="Too simple"
+        mediumLabel="Average complexity"
+        strongLabel="Complex password"
+        [toggleMask]="true"
+      >
+        <ng-template pTemplate="header">
+          <h6>Confirm your password</h6>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <p-divider></p-divider>
+          <p class="mt-2">Suggestions</p>
+          <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+            <li>At least one lowercase</li>
+            <li>At least one uppercase</li>
+            <li>At least one numeric</li>
+            <li>Minimum 8 characters</li>
+          </ul>
+        </ng-template>
+      </p-password>
+    </div>
+  </div>
+
+  <div class="flex">
+    <div class="col-6">
+      <div class="flex flex-column gap-2">
+        <label for="username">Username</label>
+        <p-inputIcon iconPosition="left">
+          <i class="pi pi-check" style="color: #22c55e"></i>
+          <input type="text" pInputText placeholder="username" id="username" />
+        </p-inputIcon>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="flex flex-column gap-2">
+        <label for="email">Email</label>
+        <p-inputIcon iconPosition="left">
+          <i class="pi pi-times"></i>
+          <input type="text" pInputText placeholder="email" id="email" />
+        </p-inputIcon>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex">
+    <div class="col-6">
+      <p-calendar
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        inputId="icondisplay"
+      ></p-calendar>
+    </div>
+
+    <div class="col-6">
+      <p-calendar
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        [timeOnly]="true"
+        inputId="templatedisplay"
+      >
+        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+          <i
+            class="pi pi-user pointer-events-none"
+            (click)="clickCallBack($event)"
+          ></i>
+        </ng-template>
+      </p-calendar>
+    </div>
+  </div>
+
+  <div class="flex">
+    <p-inputNumber placeholder="Phone Number"></p-inputNumber>
+  </div>
+
+  <div class="flex justify-content-center">
+    <p-button label="Submit" icon="pi pi-check" severity="success"></p-button>
+  </div>
+</div>

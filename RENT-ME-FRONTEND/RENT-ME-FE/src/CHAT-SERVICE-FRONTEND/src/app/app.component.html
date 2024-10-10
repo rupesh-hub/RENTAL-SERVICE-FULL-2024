@@ -1,0 +1,34 @@
+<div class="position-absolute mt-3 toast-container">
+  @for (toast of toastService.toasts; track toast) {
+    <ngb-toast [class]="toast.className"
+               [autohide]="true"
+               [delay]="3000"
+               (hidden)="toastService.remove(toast)"
+    >
+      {{ toast.body }}
+    </ngb-toast>
+  }
+</div>
+
+<div class="m-4 main-background main-grid" id="main">
+  <div class="wac-navbar" id="navbar">
+    <wac-navbar></wac-navbar>
+  </div>
+
+  <div class="header" id="header">
+    header
+  </div>
+
+  <div class="conversations" id="conversations">
+    conversations
+  </div>
+
+  <div class="chat" id="chat">
+    chat
+  </div>
+
+  <div class="send-message" id="send-message">
+    send
+  </div>
+
+</div>

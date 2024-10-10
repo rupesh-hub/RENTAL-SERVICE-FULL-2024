@@ -1,0 +1,243 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-6">Shopping cart</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead class="bg-gray-100 text-gray-600">
+            <tr>
+              <th class="text-left py-3 px-4">Product</th>
+              <th class="text-left py-3 px-4">Quantity</th>
+              <th class="text-left py-3 px-4">Price</th>
+              <th class="text-left py-3 px-4">Total</th>
+              <th class="text-left py-3 px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Example for loop -->
+            <!-- Use proper Angular loop syntax here, e.g., *ngFor -->
+            @for (item of cartItems; track item.id) {
+            <tr class="hover:bg-gray-100 transition-colors">
+              <td class="py-4 px-4 flex items-center">
+                <img
+                  [src]="item.image"
+                  alt="{{ item.name }}"
+                  class="w-12 h-12 object-cover rounded-lg mr-4 shadow-sm"
+                />
+                <span class="font-medium text-gray-700">{{ item.name }}</span>
+              </td>
+              <td class="py-4 px-4">
+                <input
+                  type="number"
+                  min="1"
+                  class="w-16 p-2 border border-gray-300 rounded focus:ring-1 focus:ring-orange-300 focus:outline-none"
+                />
+              </td>
+              <td class="py-4 px-4 text-gray-600">
+                ${{ item.price.toFixed(2) }}
+              </td>
+              <td class="py-4 px-4 text-gray-600">
+                ${{ (item.price * item.quantity).toFixed(2) }}
+              </td>
+              <td class="py-4 px-4">
+                <button
+                  (click)="removeItem(item)"
+                  class="text-red-400 p-2 transition-colors"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+          <tfoot class="bg-gray-50 border-t">
+            <tr>
+              <td
+                colspan="3"
+                class="text-right py-4 px-4 font-semibold text-gray-700"
+              >
+                TOTAL:
+              </td>
+              <td class="py-4 px-4 font-semibold text-gray-700">
+                ${{ total.toFixed(2) }}
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <!-- Title -->
+        <h2
+          class="text-2xl font-semibold text-gray-800 mb-6 bg-gray-50 p-2 rounded-md"
+        >
+          Payment Summary
+        </h2>
+
+        <!-- Transaction Code -->
+        <div class="mb-6 flex justify-between items-center">
+          <label class="block text-sm font-medium text-gray-600"
+            >Transaction Code</label
+          >
+          <div class="mt-1 text-lg font-semibold text-gray-800">VC1156S</div>
+        </div>
+
+        <!-- Coupon Code Input -->
+        <div class="mb-6">
+          <!-- <label for="coupon" class="block text-sm font-medium text-gray-600">Coupon Code</label> -->
+          <div class="mt-2 flex rounded-md shadow-sm gap-2">
+            <input
+              type="text"
+              name="coupon"
+              id="coupon"
+              class="flex-1 block w-full px-4 py-2 rounded-sm border-gray-300 sm:text-sm bg-gray-100"
+              placeholder="Enter coupon"
+            />
+            <button
+              class="bg-gray-600 text-white px-4 py-2 rounded-sm text-sm font-medium transition"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="space-y-4">
+          <div class="flex justify-between text-gray-600">
+            <span>Order Summary</span>
+            <span class="font-medium text-gray-800">$1200</span>
+          </div>
+          <div class="flex justify-between text-gray-600">
+            <span>Additional Service</span>
+            <span class="font-medium text-gray-800">$5</span>
+          </div>
+          <div
+            class="flex justify-between font-semibold text-lg text-gray-800 border-t pt-4"
+          >
+            <span>Total Amount</span>
+            <span>$1205.00</span>
+          </div>
+        </div>
+
+        <!-- Sale Expiry Notification -->
+        <div
+          class="mt-3 p-2 bg-red-100 text-red-600 rounded-[3px] text-center font-semibold"
+        >
+          SALE EXPIRING IN: 21 HOURS, 31 MINUTES
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-gray-100 p-6 rounded-xl shadow-sm">
+      @for (card of creditCards; track card.id) {
+      <div
+        class="bg-white rounded-xl mb-4 p-4 flex items-center justify-between shadow"
+      >
+        <div class="flex items-center space-x-4">
+          <div
+            class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center"
+          >
+            @if (card.type === 'visa') {
+            <svg
+              class="w-10 h-10"
+              viewBox="0 0 1000 324"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M651.185 318.092H563.094L618.446 5.62H706.538L651.185 318.092Z"
+                fill="#00579F"
+              />
+              <path
+                d="M432.218 13.612L346.673 220.146L339.593 187.277L339.597 187.289L309.755 36.098C309.755 36.098 305.703 13.612 279.325 13.612H168.877L167.361 20.838C167.361 20.838 201.641 28.454 232.24 46.884L309.122 318.093H400.57L528.264 13.612H432.218Z"
+                fill="#00579F"
+              />
+              <path
+                d="M924.877 318.092H1007.76L931.295 5.62H858.961C835.897 5.62 827.393 24.692 827.393 24.692L700.574 318.092H792.028L808.394 275.591H914.15L924.877 318.092ZM833.322 212.429L885.351 77.806L913.898 212.429H833.322Z"
+                fill="#00579F"
+              />
+              <path
+                d="M747.757 105.14C747.757 81.586 768.044 66.78 802.745 66.78C828.686 66.78 848.973 73.97 848.973 73.97L856.615 13.192C856.615 13.192 830.674 5.58 798.261 5.58C712.93 5.58 657.578 50.522 657.578 112.33C657.578 201.18 754.546 202.25 754.546 245.084C754.546 261.026 740.115 268.638 713.321 268.638C673.6 268.638 640.047 253.118 640.047 253.118L632.016 312.206C632.016 312.206 664.005 324.002 712.93 324.002C803.52 324.002 845.73 280.13 845.73 215.326C845.73 134.796 747.757 128.254 747.757 105.14Z"
+                fill="#00579F"
+              />
+            </svg>
+            } @else {
+            <svg
+              class="w-10 h-10"
+              viewBox="0 0 1000 618"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M631.666 308.627C631.666 418.586 542.707 507.545 432.748 507.545C322.789 507.545 233.83 418.586 233.83 308.627C233.83 198.668 322.789 109.709 432.748 109.709C542.707 109.709 631.666 198.668 631.666 308.627Z"
+                fill="#FF5F00"
+              />
+              <path
+                d="M432.748 109.709C360.269 109.709 295.595 143.042 253.492 194.365C302.814 253.903 331.666 308.627 331.666 308.627C331.666 308.627 302.814 363.351 253.492 422.889C295.595 474.212 360.269 507.545 432.748 507.545C542.707 507.545 631.666 418.586 631.666 308.627C631.666 198.668 542.707 109.709 432.748 109.709Z"
+                fill="#EB001B"
+              />
+              <path
+                d="M766.17 507.545C876.129 507.545 965.088 418.586 965.088 308.627C965.088 198.668 876.129 109.709 766.17 109.709C693.691 109.709 629.017 143.042 586.914 194.365C636.236 253.903 665.088 308.627 665.088 308.627C665.088 308.627 636.236 363.351 586.914 422.889C629.017 474.212 693.691 507.545 766.17 507.545Z"
+                fill="#F79E1B"
+              />
+            </svg>
+            }
+          </div>
+          <div>
+            <h2 class="text-lg font-semibold">
+              {{ card.type | titlecase }} ending in {{ card.lastFourDigits }}
+            </h2>
+            <p class="text-gray-500">Exp. date {{ card.expirationDate }}</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          @if (card.isDefault) {
+          <span class="px-2 py-1 bg-gray-900 text-white text-sm rounded-md"
+            >Default</span
+          >
+          } @else if (card.isExpired) {
+          <span class="px-2 py-1 bg-red-100 text-red-600 text-sm rounded-md"
+            >Expired</span
+          >
+          } @else {
+          <button class="text-blue-600 text-sm hover:underline">
+            Set as Default
+          </button>
+          }
+          <button class="text-gray-500 hover:text-gray-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

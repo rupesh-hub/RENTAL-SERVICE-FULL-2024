@@ -1,0 +1,30 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300..900&display=swap');
+
+// *{
+//   font-family: "Inconsolata", monospace;
+//   font-optical-sizing: auto;
+//   font-weight: 600;
+// }
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  .comment {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+  }
+  .add-comment textarea {
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+  }
+
+  .text-success{
+    color: #22c55e; 
+  }
+
+  .text-danger{
+    color: #ef4444;
+  }

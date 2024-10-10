@@ -11,7 +11,7 @@ export class NavbarComponent {
 
   items: MenuItem[] = [];
   profileItems: MenuItem[] = [];
-  isLoggedIn: boolean = false;
+  isLoggedIn: boolean = true;
   notificationCount: number = 4;
   private cartItemCount:number=2;
 
@@ -32,7 +32,10 @@ export class NavbarComponent {
       },
       {
         label: 'Cart',
-        icon: 'pi pi-fw pi-shopping-bag'
+        icon: 'pi pi-fw pi-shopping-bag',
+        command: () => {
+          this.cartPage()
+        }
       }
     ];
 
@@ -58,5 +61,10 @@ export class NavbarComponent {
 
   private productPage():void{
     this._router.navigate(['/products/all'])
+  }
+
+
+  private cartPage():void{
+    this._router.navigate(['/cart'])
   }
 }

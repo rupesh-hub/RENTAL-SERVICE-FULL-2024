@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+:host {
+  font-family: "Inter", sans-serif;
+}
+
+@keyframes moveForthBack {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(7px); /* Move forth */
+    }
+    100% {
+      transform: translateX(0); /* Move back */
+    }
+  }
+  
+  .animate-move {
+    animation: moveForthBack 1s infinite ease-in-out;
+  }
+  

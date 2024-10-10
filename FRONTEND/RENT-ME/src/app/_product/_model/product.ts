@@ -4,6 +4,10 @@ export interface Product {
   description: string;
   rating: number;
   comment: Comment[];
-  image: string[];
+  image: string;
   price: number;
+  inventoryStatus:string;
+  category:string;
+  model:string;
+  brand:string;
 }
